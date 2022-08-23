@@ -504,16 +504,7 @@ void rep(string path){
                  "\n"
                  "    node_A [shape=record label=\"";
     MBR retorno = leerMBR(path);
-    dot += "    MBR\\nTamaño: ";
-    dot+= to_string(retorno.mbr_tamano);
-    dot += "\\n";
-    dot+="Fecha de Creación: ";
-    string fechaa= rtfecha(retorno.mbr_fecha_creacion);
-    dot+= fechaa;
-    dot += "\\n";
-    dot+="Signature: ";
-    dot+= to_string(retorno.mbr_dsk_signature);
-
+    
 
     partitiond particiones[4];
     particiones[0] = retorno.mbr_partition_1;
@@ -524,7 +515,19 @@ void rep(string path){
     dot+= "<TR><TD>MBR</TD><TD>PARTICION 1</TD><TD>PARTICION 2</TD><TD>PARTICION 3</TD><TD>PARTICION 4</TD></TR>\n";
     dot+="<TR>";
     dot+="<TD>";
-
+    
+    dot += "SIZE: ";
+    dot+= to_string(retorno.mbr_tamano);
+    dot += "\\n";
+    dot+="DATE: ";
+    string fechaa= rtfecha(retorno.mbr_fecha_creacion);
+    dot+= fechaa;
+    dot += "\\n";
+    dot+="SIGNATURE: ";
+    dot+= to_string(retorno.mbr_dsk_signature);
+    dot += "\\n";
+    dot+="FIT: ";
+    dot+= to_string(retorno.dsk_fit);
     dot+="</TD>\n";
 
     for (int i = 0; i < 4; ++i) {
@@ -536,10 +539,11 @@ void rep(string path){
         if(status=="1"){
             dot+="";
             if(tipo=="P"){
-                
+                dot+="PRIMARY\nSIZE:  ";
             }else{
-                
+                dot+="EXTEND\nSIZE:  ";
             }
+            dot+=particiones[i].part_s;
         }else{
             dot+="ESPACIO LIBRE";
         }
@@ -547,7 +551,8 @@ void rep(string path){
     }
     dot+="</TR>\n";
     dot += "\"    </TABLE>>];\n}\";";
-    escribirDOT(dot);
+    cout<<dot<<endl;
+    //escribirDOT(dot);
 }
 
 
